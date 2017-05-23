@@ -10,13 +10,16 @@ RUN apt-get update && apt-get install -y \
 	openjdk-7-jre openjdk-7-jdk python python-mako gettext genisoimage syslinux
 
 
-USER ric-docker
-WORKDIR /home/ric-docker
+RUN useradd -u 1000 --create-home -r -g 100 docker
+RUN usermod -aG sudo docker
+RUN echo "docker:password" | chpasswd
+USER docker
+WORKDIR /home/docker
 
 RUN mkdir ~/bin
 ENV PATH=~/bin:$PATH
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 RUN chmod a+x ~/bin/repo
-RUN echo 'USER=$(id -un)' >> ~/.bashrc
+RUN echo 'USER=$(whoami)' >> ~/.bashrc
 
 ENTRYPOINT ["bash", "-l"]
