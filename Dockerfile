@@ -9,9 +9,11 @@ RUN apt-get update && apt-get install -y \
  	libgl1-mesa-dev libxml2-utils xsltproc unzip nano htop \
 	openjdk-8-jre openjdk-8-jdk python python-mako gettext genisoimage syslinux
 
-
-USER ric-docker
-WORKDIR /home/ric-docker
+RUN useradd -u 1000 --create-home -r -g 100 docker
+RUN usermod -aG sudo docker
+RUN echo "docker:password" | chpasswd
+USER docker
+WORKDIR /home/docker
 
 RUN mkdir ~/bin
 ENV PATH=~/bin:$PATH
